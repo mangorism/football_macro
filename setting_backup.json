@@ -1,0 +1,48 @@
+{
+    "book_start":{
+        "time_hour" : 11,
+        "time_minute" : 0
+    },
+    "ground_order": {
+        "1" : "임호",
+        "2" : "장유",
+        "3"
+
+
+    },
+    "settings": [
+        {
+            "id":"노바축구동호회", 
+            "passwd":"g123456*",
+            "day":"월",
+            "week": 5,
+            "start_time":9,
+            "hour":3
+        },
+        {
+            "id":"소망클럽", 
+            "passwd":"church11*",
+            "day":"화",
+            "week": 5,
+            "start_time":9,
+            "hour":3
+        },
+        {
+            "id":"김해중앙교회축구선교회", 
+            "passwd":"g123456*",
+            "day":"수",
+            "week": 5,
+            "start_time":9,
+            "hour":3
+        },
+        {
+            "id":"클럽중아교회", 
+            "passwd":"g123456*",
+            "day":"목",
+            "week": 5,
+            "start_time":9,
+            "hour":3
+        }
+    ]
+
+}

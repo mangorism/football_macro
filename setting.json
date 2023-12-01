@@ -1,0 +1,17 @@
+{
+    "book_start":{
+        "time_hour" : 15,
+        "time_minute" : 59
+    },
+    "settings": [
+        {
+            "id":"김해중앙교회축구선교회", 
+            "passwd":"g123456*",
+            "day":"수",
+            "week": 5,
+            "start_time":18,
+            "hour":3
+        }
+    ]
+
+}
