@@ -1,16 +1,17 @@
 {
     "book_start":{
-        "time_hour" : 15,
-        "time_minute" : 59
+        "time_hour" : 0,
+        "time_minute" : 12
     },
     "settings": [
         {
-            "id":"김해중앙교회축구선교회", 
-            "passwd":"g123456*",
-            "day":"수",
+            "id":"소망클럽", 
+            "passwd":"church11*",
+            "day":"일",
             "week": 5,
-            "start_time":18,
-            "hour":3
+            "start_time":[15, 16],
+            "hour":3,
+            "ground" : ["임호", "삼계"]
         }
     ]
 

@@ -1,14 +1,7 @@
 {
     "book_start":{
-        "time_hour" : 11,
-        "time_minute" : 0
-    },
-    "ground_order": {
-        "1" : "임호",
-        "2" : "장유",
-        "3"
-
-
+        "time_hour" : 23,
+        "time_minute" : 30
     },
     "settings": [
         {
@@ -16,32 +9,36 @@
             "passwd":"g123456*",
             "day":"월",
             "week": 5,
-            "start_time":9,
-            "hour":3
+            "start_time":[9],
+            "hour":3,
+            "ground" : ["삼계", "임호"]
         },
         {
             "id":"소망클럽", 
             "passwd":"church11*",
             "day":"화",
             "week": 5,
-            "start_time":9,
-            "hour":3
+            "start_time":[9],
+            "hour":3,
+            "ground" : ["삼계", "임호"]
         },
         {
             "id":"김해중앙교회축구선교회", 
             "passwd":"g123456*",
             "day":"수",
             "week": 5,
-            "start_time":9,
-            "hour":3
+            "start_time":[9],
+            "hour":3,
+            "ground" : ["삼계", "임호"]
         },
         {
             "id":"클럽중아교회", 
             "passwd":"g123456*",
             "day":"목",
             "week": 5,
-            "start_time":9,
-            "hour":3
+            "start_time":[9],
+            "hour":3,
+            "ground" : ["삼계", "임호"]
         }
     ]
 

@@ -22,10 +22,11 @@ def do_reserve(setting):
     passwd = setting['passwd']
     day = setting['day']
     week = setting['week']
-    start_time = setting['start_time']
+    start_time_list = setting['start_time']
     hour = setting['hour']
     book_time_h = setting['book_time_h']
     book_time_m = setting['book_time_m']
+    ground_list = setting['ground']
 
     if day == '월' or day == '월요일' or day.lower() == 'mon' or day.lower() == 'monday':
         day_int = 2
@@ -43,7 +44,7 @@ def do_reserve(setting):
         day_int = 1
     else:
         day_int = 1
-
+    
     service = Service(ChromeDriverManager().install())
 
     driver = webdriver.Chrome(service=service, options=options)
@@ -54,7 +55,8 @@ def do_reserve(setting):
     ## login
     driver.get('https://www.gimhae.go.kr/yes/05566/05580/05582.web')
 
-    ## init page loading wait 20 minutes
+    ## init login page loading wait 20 minutes
+
     try:
         WebDriverWait(driver, 1200).until(EC.presence_of_element_located((By.XPATH, '//*[@id="body_content"]/div/div/div/div/h4[2]/a')))
     except TimeoutException:
@@ -65,40 +67,63 @@ def do_reserve(setting):
     driver.find_element(By.XPATH, '//*[@id="grouppassword"]').send_keys(Keys.ENTER)
 
 
-    # time_stop = datetime.datetime.now()
-    # while(not(time_stop.hour == book_time_h and time_stop.minute == book_time_m)):  
-    #     time_stop = datetime.datetime.now()
+    time_stop = datetime.datetime.now()
+    while(not(time_stop.hour == book_time_h and time_stop.minute == book_time_m)):  
+        time_stop = datetime.datetime.now()
 
-    ## booking page
-    driver.get('https://www.gimhae.go.kr/yes/05561/05630/05681.web')
-
-    try:
-        WebDriverWait(driver, 1200).until(EC.presence_of_element_located((By.XPATH, '//*[@id="body_content"]/div/div[3]/ul/li[1]')))
-        driver.find_element(By.XPATH, '//*[@id="body_content"]/div/div[3]/ul/li[1]').click()
-        WebDriverWait(driver, 1200).until(EC.presence_of_element_located((By.XPATH, '//*[@id="app-lease"]/div[1]/div/div/div[2]/table/tbody/tr[{}]/td[{}]/a/i'.format(week, day_int))))
-        driver.find_element(By.XPATH, '//*[@id="app-lease"]/div[1]/div/div/div[2]/table/tbody/tr[{}]/td[{}]/a/i'.format(week, day_int)).click()
-        
-        WebDriverWait(driver, 1200).until(EC.presence_of_element_located((By.XPATH, '//*[@id="app-lease"]/div[2]/form/div/ul/li[10]/label')))
-        flag_check = False
-        for click_idx in range(start_time, start_time+hour):
-            if driver.find_element(By.XPATH, '//*[@id="app-lease"]/div[2]/form/div/ul/li[{}]/label/span[2]/i[2]/span'.format(click_idx-8)).text == '가능':
-
-
-            driver.find_element(By.XPATH, '//*[@id="app-lease"]/div[2]/form/div/ul/li[{}]/label'.format(click_idx-8)).click()
-        //*[@id="app-lease"]/div[2]/form/div/ul/li[10]/label/span[2]/i[1]
-        driver.find_element(By.XPATH, '//*[@id="app-lease"]/div[2]/form/div/div[2]/button[1]').click()
-        print("Page is ready!")
-    except TimeoutException:
-        print("Loading took too much time!")
-
-    driver.find_element(By.XPATH, '//*[@id="leaseSubscriberVO"]/div[2]/div/div/label/i').click()
-    driver.find_element(By.XPATH, '//*[@id="numPerson"]').send_keys('40')
-    driver.find_element(By.XPATH, '//*[@id="eventNm"]').send_keys('친선 축구 경기')
-    driver.find_element(By.XPATH, '//*[@id="purpose"]').send_keys('친선 축구 경기')
-    driver.find_element(By.XPATH, '//*[@id="leaseSubscriberVO"]/div[4]/div/div/label/i').click()
-    driver.find_element(By.XPATH, '//*[@id="leaseSubscriberVO"]/div[5]/p/button').click()
-    driver.switch_to.alert.accept()
+    ## ground page init
     
+    for ground_name in ground_list:
+        if ground_name == '임호':
+            driver.get('https://www.gimhae.go.kr/yes/05561/05630/05681.web')
+        elif ground_name == '삼계':
+            driver.get('https://www.gimhae.go.kr/yes/05561/05630/05887.web')
+        elif ground_name == '장유':
+            driver.get('https://www.gimhae.go.kr/yes/05561/05630/05679.web')
+        elif ground_name == '안동':
+            driver.get('https://www.gimhae.go.kr/yes/05561/05630/05678.web')
+
+        try:
+            
+            WebDriverWait(driver, 1200).until(EC.presence_of_element_located((By.XPATH, '//*[@id="body_content"]/div/div[3]/ul/li[1]')))
+            driver.find_element(By.XPATH, '//*[@id="body_content"]/div/div[3]/ul/li[1]').click()
+            WebDriverWait(driver, 1200).until(EC.presence_of_element_located((By.XPATH, '//*[@id="app-lease"]/div[1]/div/div/div[2]/table/tbody/tr[{}]/td[{}]/a/i'.format(week, day_int))))
+            day_element = driver.find_element(By.XPATH, '//*[@id="app-lease"]/div[1]/div/div/div[2]/table/tbody/tr[{}]/td[{}]/a/i'.format(week, day_int))
+            if day_element.text == '예약불가':
+                print('Ground : {}, Week : {}, day : {} is already Full.'.format(ground_name, week, day))
+                continue
+                        
+            driver.find_element(By.XPATH, '//*[@id="app-lease"]/div[1]/div/div/div[2]/table/tbody/tr[{}]/td[{}]/a/i'.format(week, day_int)).click()
+            
+            WebDriverWait(driver, 1200).until(EC.presence_of_element_located((By.XPATH, '//*[@id="app-lease"]/div[2]/form/div/ul/li[{}-8]/label'.format(start_time_list[0]))))
+            flag_check = True
+            for start_time in start_time_list:
+                flag_check = True
+                for click_idx in range(start_time, start_time+hour):
+                    ## 하나라도 불가면 다른 시간 알아보기
+                    if driver.find_element(By.XPATH, '//*[@id="app-lease"]/div[2]/form/div/ul/li[{}]/label/span[2]/i[2]/span'.format(click_idx-8)).text == '불가':
+                        flag_check = False
+                        break
+                    ## 불가가 없으면 통과
+                if flag_check:
+                    for click_idx in range(start_time, start_time+hour):
+                        driver.find_element(By.XPATH, '//*[@id="app-lease"]/div[2]/form/div/ul/li[{}]/label'.format(click_idx-8)).click()
+                    driver.find_element(By.XPATH, '//*[@id="app-lease"]/div[2]/form/div/div[2]/button[1]').click()
+                    break
+            if flag_check:
+                WebDriverWait(driver, 1200).until(EC.presence_of_element_located((By.XPATH, '//*[@id="leaseSubscriberVO"]/div[2]/div/div/label/i')))
+                driver.find_element(By.XPATH, '//*[@id="leaseSubscriberVO"]/div[2]/div/div/label/i').click()
+                driver.find_element(By.XPATH, '//*[@id="numPerson"]').send_keys('40')
+                driver.find_element(By.XPATH, '//*[@id="eventNm"]').send_keys('친선 축구 경기')
+                driver.find_element(By.XPATH, '//*[@id="purpose"]').send_keys('친선 축구 경기')
+                driver.find_element(By.XPATH, '//*[@id="leaseSubscriberVO"]/div[4]/div/div/label/i').click()
+                driver.find_element(By.XPATH, '//*[@id="leaseSubscriberVO"]/div[5]/p/button').click()
+                driver.switch_to.alert.accept()
+            else:
+                continue
+
+        except TimeoutException:
+            print("Loading takes too much time!")
 
 def main():
     ## get setting info
