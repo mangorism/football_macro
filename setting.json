@@ -1,17 +1,26 @@
 {
     "book_start":{
-        "time_hour" : 0,
-        "time_minute" : 12
+        "time_hour" : 19,
+        "time_minute" : 0
     },
     "settings": [
         {
-            "id":"소망클럽", 
-            "passwd":"church11*",
-            "day":"일",
-            "week": 5,
-            "start_time":[15, 16],
+            "id":"김해중앙교회축구선교", 
+            "passwd":"g123456*",
+            "day":"토",
+            "week": 1,
+            "start_time":[19],
             "hour":3,
-            "ground" : ["임호", "삼계"]
+            "ground" : ["삼계", "임호"]
+        },
+        {
+            "id":"김해중앙교회축구회", 
+            "passwd":"g123456*",
+            "day":"토",
+            "week": 4,
+            "start_time":[19],
+            "hour":3,
+            "ground" : ["삼계", "임호"]
         }
     ]
 

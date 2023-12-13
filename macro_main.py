@@ -66,10 +66,10 @@ def do_reserve(setting):
     driver.find_element(By.XPATH, '//*[@id="grouppassword"]').send_keys(passwd)
     driver.find_element(By.XPATH, '//*[@id="grouppassword"]').send_keys(Keys.ENTER)
 
-
-    time_stop = datetime.datetime.now()
-    while(not(time_stop.hour == book_time_h and time_stop.minute == book_time_m)):  
-        time_stop = datetime.datetime.now()
+    ## time checker
+    # time_stop = datetime.datetime.now()
+    # while(not(time_stop.hour == book_time_h and time_stop.minute == book_time_m)):  
+    #     time_stop = datetime.datetime.now()
 
     ## ground page init
     
@@ -90,7 +90,7 @@ def do_reserve(setting):
             WebDriverWait(driver, 1200).until(EC.presence_of_element_located((By.XPATH, '//*[@id="app-lease"]/div[1]/div/div/div[2]/table/tbody/tr[{}]/td[{}]/a/i'.format(week, day_int))))
             day_element = driver.find_element(By.XPATH, '//*[@id="app-lease"]/div[1]/div/div/div[2]/table/tbody/tr[{}]/td[{}]/a/i'.format(week, day_int))
             if day_element.text == '예약불가':
-                print('Ground : {}, Week : {}, day : {} is already Full.'.format(ground_name, week, day))
+                print('ID : {}, Ground : {}, Week : {}, day : {} is already Full.'.format(id, ground_name, week, day))
                 continue
                         
             driver.find_element(By.XPATH, '//*[@id="app-lease"]/div[1]/div/div/div[2]/table/tbody/tr[{}]/td[{}]/a/i'.format(week, day_int)).click()
@@ -102,6 +102,7 @@ def do_reserve(setting):
                 for click_idx in range(start_time, start_time+hour):
                     ## 하나라도 불가면 다른 시간 알아보기
                     if driver.find_element(By.XPATH, '//*[@id="app-lease"]/div[2]/form/div/ul/li[{}]/label/span[2]/i[2]/span'.format(click_idx-8)).text == '불가':
+                        print('ID : {}, Ground : {}, Week : {}, day : {}, start_time : {} is already Full.'.format(id, ground_name, week, day, start_time))
                         flag_check = False
                         break
                     ## 불가가 없으면 통과
