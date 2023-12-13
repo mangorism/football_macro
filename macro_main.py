@@ -67,9 +67,9 @@ def do_reserve(setting):
     driver.find_element(By.XPATH, '//*[@id="grouppassword"]').send_keys(Keys.ENTER)
 
     ## time checker
-    # time_stop = datetime.datetime.now()
-    # while(not(time_stop.hour == book_time_h and time_stop.minute == book_time_m)):  
-    #     time_stop = datetime.datetime.now()
+    time_stop = datetime.datetime.now()
+    while(not(time_stop.hour == book_time_h and time_stop.minute == book_time_m)):  
+        time_stop = datetime.datetime.now()
 
     ## ground page init
     
