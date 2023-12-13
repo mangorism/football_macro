@@ -82,9 +82,10 @@ def do_reserve(setting):
             driver.get('https://www.gimhae.go.kr/yes/05561/05630/05679.web')
         elif ground_name == '안동':
             driver.get('https://www.gimhae.go.kr/yes/05561/05630/05678.web')
+        elif ground_name == '어방':
+            driver.get('https://www.gimhae.go.kr/yes/05561/05630/05680.web')
 
         try:
-            
             WebDriverWait(driver, 1200).until(EC.presence_of_element_located((By.XPATH, '//*[@id="body_content"]/div/div[3]/ul/li[1]')))
             driver.find_element(By.XPATH, '//*[@id="body_content"]/div/div[3]/ul/li[1]').click()
             WebDriverWait(driver, 1200).until(EC.presence_of_element_located((By.XPATH, '//*[@id="app-lease"]/div[1]/div/div/div[2]/table/tbody/tr[{}]/td[{}]/a/i'.format(week, day_int))))
