@@ -12,6 +12,14 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException
 
+import time
+import requests
+import os
+import numpy as np
+from io import BytesIO
+from PIL import Image
+import pytesseract
+import re
 
 def do_reserve(setting):
     options = Options()
@@ -68,7 +76,7 @@ def do_reserve(setting):
 
     ## time checker
     time_stop = datetime.datetime.now()
-    while(not(time_stop.hour == book_time_h and time_stop.minute == book_time_m)):  
+    while(not(time_stop.hour == book_time_h and time_stop.minute >= book_time_m)):
         time_stop = datetime.datetime.now()
 
     ## ground page init
@@ -114,13 +122,35 @@ def do_reserve(setting):
                     break
             if flag_check:
                 WebDriverWait(driver, 1200).until(EC.presence_of_element_located((By.XPATH, '//*[@id="leaseSubscriberVO"]/div[2]/div/div/label/i')))
+                pass_captcha_flag = False
+                while not pass_captcha_flag:
+                    image_element = driver.find_element(By.XPATH, '//*[@id="gameScreen"]')
+                    image_element.screenshot(r'E:\workspace\football_macro\captcha_imgs\captcha_{}.png'.format(id))
+                    image = Image.open(r'E:\workspace\football_macro\captcha_imgs\captcha_{}.png'.format(id))
+                    captcha_text = pytesseract.image_to_string(image, config='--psm 6 digits')
+                    captcha_text = captcha_text.strip()
+                    captcha_num = re.sub(r'\D', '', captcha_text)
+                    driver.find_element(By.XPATH, '//*[@id="gameAnswer"]').send_keys(captcha_num)
+                    driver.find_element(By.XPATH, '//*[@id="leaseSubscriberVO"]/table[3]/tbody/tr[5]/td/a').click()
+                    time.sleep(0.5)
+                    alert = driver.switch_to.alert
+                    alert_text = alert.text
+                    alert.accept()
+                    if alert_text == '인증되었습니다!':
+                        pass_captcha_flag = True
+                    else:
+                        driver.refresh()
+                
                 driver.find_element(By.XPATH, '//*[@id="leaseSubscriberVO"]/div[2]/div/div/label/i').click()
                 driver.find_element(By.XPATH, '//*[@id="numPerson"]').send_keys('40')
                 driver.find_element(By.XPATH, '//*[@id="eventNm"]').send_keys('친선 축구 경기')
                 driver.find_element(By.XPATH, '//*[@id="purpose"]').send_keys('친선 축구 경기')
+                
                 driver.find_element(By.XPATH, '//*[@id="leaseSubscriberVO"]/div[4]/div/div/label/i').click()
                 driver.find_element(By.XPATH, '//*[@id="leaseSubscriberVO"]/div[5]/p/button').click()
+                
                 driver.switch_to.alert.accept()
+                print('success!! ID :{} Ground : {}, Week : {}'.format(id, ground_name, week))
             else:
                 continue
 
